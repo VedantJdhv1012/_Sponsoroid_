@@ -1,0 +1,108 @@
+.profile-container {
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  background: #f9f9f9;
+}
+
+.profile-box {
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  width: 100%;
+  padding: 20px;
+  position: relative;
+  transition: transform 0.3s ease-in-out;
+}
+
+.profile-box:hover {
+  transform: translateY(-10px);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #ddd;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header h1 {
+  font-size: 2.2rem;
+  margin: 10px 0;
+  color: #333;
+}
+
+.type-of-content {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.profile-details {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.social-links a {
+  font-size: 1.6rem;
+  color: #555;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #007bff;
+}
+
+.contact-info {
+  margin: 20px 0;
+  font-size: 1rem;
+  color: #666;
+}
+
+.contact-info a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.contact-info a:hover {
+  text-decoration: underline;
+}
+
+.description {
+  margin-top: 20px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.message-button {
+  display: block;
+  margin: 30px auto;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.message-button:hover {
+  background-color: #0056b3;
+}
