@@ -1,8 +1,11 @@
 import React, { useState,useRef,useEffect } from 'react';
 import './RegisterCreator.css'; // Import the CSS file for styling
 import { Link } from 'react-router-dom'; // Use Link from react-router-dom for internal routing
-
+import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
+// import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const RegisterCreator = () => {
+  // const navigate = useNavigate();
   const userRef= useRef();
   const errRef= useRef();
   const [name, setName] = useState('');
@@ -12,22 +15,60 @@ const RegisterCreator = () => {
   const [password, setPassword] = useState('');
   const [typeofContent, setTypeofContent] = useState('');
   const [description, setDescription] = useState('');
-  const [avatar, setAvatar] = useState(null);
+  // const [avatar, setAvatar] = useState(null);
+  const fileInput = React.createRef();
+  useEffect(() => {
+    if (
+      localStorage.getItem("token") != null &&
+      localStorage.getItem("token") != undefined
+    ) {
+      window.location.href = `/creators`;
+    }
+  }, [localStorage.getItem("token")]);
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('instaLink', instaLink);
+    formData.append('youtubeLink', youtubeLink);
+    formData.append('password', password);
+    formData.append('TypeofContent', typeofContent);
+    formData.append('description', description);
+    formData.append('avatar', fileInput.current.files[0]); // Assuming fileInput is a ref to the file input element
 
-  const handleSubmit = (event) => {
-    
-    event.preventDefault();
-    // Add form submission logic here
-  };
+    // console.log([...formData.entries()]);
 
-  const handleFileChange = (event) => {
-    setAvatar(event.target.files[0]);
-  };
+    try {
+        const response = await axios.post('http://localhost:2000/api/v1/creator/register', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        if (response.status !== 200) { // Check if response status is not OK
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = response.data;
+        localStorage.setItem('token', data.token);
+        console.log(data);
+        window.location.href = `/creators`;
+
+    } catch (err) {
+        console.log('Error:', err);
+    }
+};
+
+const submitBtn = async (e) => {
+  e.preventDefault();
+  await handleSubmit();
+};
+
 
   return (
     <div className="register-creator">
       <h2>Creator Registration</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={submitBtn} encType='multipart/form-data'>
         <div className="form-group">
           <label htmlFor="name">Name</label> {/* Updated label */}
           <input
@@ -99,14 +140,15 @@ const RegisterCreator = () => {
             type="file"
             id="avatar"
             accept="image/*"
-            onChange={handleFileChange}
+            ref={fileInput}
+            // onChange={handleFileChange}
           />
         </div>
         {/* <button className="btnn" type="submit">Register</button>         */}
 
-        <Link to="/creators" >
+    
         <button className="btnn" type="submit">Register</button>        
-        </Link>      </form>
+        </form>
     </div>
   );
 };
