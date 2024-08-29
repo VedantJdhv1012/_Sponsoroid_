@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './LoginCreator.css'; // Import the CSS file for styling
 import { Link } from 'react-router-dom'; // Use Link from react-router-dom for internal routing
 
 const LoginCreator = () => {
   const [creatorEmail, setCreatorEmail] = useState('');
   const [password, setPassword] = useState('');
+  useEffect(() => {
+    if (
+      localStorage.getItem("token") != null &&
+      localStorage.getItem("token") != undefined
+    ) {
+      window.location.href = `/creators`;
+    }
+  }, [localStorage.getItem("token")]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
