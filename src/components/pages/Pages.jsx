@@ -36,6 +36,7 @@ const Pages = () => {
           <Route exact path='/register-creator'component={RegisterCreator} />
           <Route exact path='/register-company'component={RegisterCompany} />
           <Route exact path='/creators'component={Team} />
+          <Route exact path='/company'component={Team} />
           <Route exact path="/profile/:id" component={Profile}/>
         </Switch>
         <Footer />

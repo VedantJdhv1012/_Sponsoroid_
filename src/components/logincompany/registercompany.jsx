@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './RegisterCompany.css'; // Import the CSS file for styling
 import { Link } from 'react-router-dom'; // Use Link from react-router-dom for internal routing
-
+import axios from 'axios';
 
 const RegisterCompany = () => {
   const [name, setName] = useState('');
@@ -11,21 +11,60 @@ const RegisterCompany = () => {
   const [twitter, setTwitter] = useState('');
   const [typeofContent, setTypeofContent] = useState('');
   const [description, setDescription] = useState('');
-  const [avatar, setAvatar] = useState(null);
+  // const [avatar, setAvatar] = useState(null);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Add form submission logic here
-  };
+  const fileInput = React.createRef();
+  useEffect(() => {
+    if (
+      localStorage.getItem("token") != null &&
+      localStorage.getItem("token") != undefined
+    ) {
+      window.location.href = `/creators`;
+    }
+  }, [localStorage.getItem("token")]);
 
-  const handleFileChange = (event) => {
-    setAvatar(event.target.files[0]);
-  };
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('linkedin', linkedin);
+    formData.append('twitter', twitter);
+    formData.append('password', password);
+    formData.append('TypeofContent', typeofContent);
+    formData.append('description', description);
+    formData.append('avatar', fileInput.current.files[0]); // Assuming fileInput is a ref to the file input element
+
+    // console.log([...formData.entries()]);
+
+    try {
+        const response = await axios.post('http://localhost:2000/api/v1/company/register', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        if (response.status !== 200) { // Check if response status is not OK
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = response.data;
+        localStorage.setItem('token', data.token);
+        console.log(data);
+        window.location.href = `/creators`;
+
+    } catch (err) {
+        console.log('Error:', err);
+    }
+};
+const submitBtn = async (e) => {
+  e.preventDefault();
+  await handleSubmit();
+};
 
   return (
     <div className="register-company">
       <h2>Company Registration</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={submitBtn} encType='multipart/form-data'>
         <div className="form-group">
           <label htmlFor="name">Name</label>
           <input
@@ -97,12 +136,12 @@ const RegisterCompany = () => {
             type="file"
             id="avatar"
             accept="image/*"
-            onChange={handleFileChange}
+            ref={fileInput}
           />
         </div>
-        <Link to="/creators" >
+        {/* <Link to="/creators" > */}
         <button className="btnn" type="submit">Register</button>        
-        </Link>
+        {/* </Link> */}
        
       </form>
     </div>

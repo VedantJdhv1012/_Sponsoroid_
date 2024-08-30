@@ -4,33 +4,56 @@ import { team } from "../data/Data"
 import "./team.css"
 import { Link } from 'react-router-dom'; // Use Link from react-router-dom for internal routing
 import axios from "axios";
-
+import { useLocation } from "react-router-dom";
+import { Buffer } from 'buffer';
 
 const Team = () => {
+  const location = useLocation();
+  let current;
+  let notCurrent;
+  const [userId,setUserId] = useState('');
+
+  useEffect(()=>{
+    if (location.pathname.includes("/creator")) {
+    current = "company";
+    notCurrent = "creator";
+    }
+    else{
+      current = "creator";
+      notCurrent = "company";
+    }
+  },[location.pathname]);
+
   useEffect(() => {
     if (
       localStorage.getItem("token") == null ||
       localStorage.getItem("token") == undefined
     ) {
-      window.location.href = `/register-creator`;
+      window.location.href = `/register-`+current;
     }
   }, [localStorage.getItem("token")]);
 
+  const token = localStorage.getItem("token");
+
+  useEffect(()=>{
+    const base64Payload = token.split('.')[1]; 
+    const decodedPayload = Buffer.from(base64Payload, 'base64').toString('utf-8');
+    const payloadObject = JSON.parse(decodedPayload);
+    setUserId(payloadObject);
+    console.log(userId);
+  },[]);
   const [creators, setCreators] = useState([]);
-
-
-  
 
   useEffect(() => {
     try {
-      axios.get('http://localhost:2000/api/v1/creator/getAll')
+      axios.get(`http://localhost:2000/api/v1/${notCurrent}/getAll`)
         .then((res) => setCreators(res.data))
-        // console.log(creators);
+        console.log(creators);
     }
     catch (err) {
       console.log(err);
     }
-  }, creators)
+  }, [])
 
   return (
     <>

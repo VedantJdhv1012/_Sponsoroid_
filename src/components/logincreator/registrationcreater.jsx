@@ -2,12 +2,8 @@ import React, { useState,useRef,useEffect } from 'react';
 import './RegisterCreator.css'; // Import the CSS file for styling
 import { Link } from 'react-router-dom'; // Use Link from react-router-dom for internal routing
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
-// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 const RegisterCreator = () => {
-  // const navigate = useNavigate();
-  const userRef= useRef();
-  const errRef= useRef();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [instaLink, setInstaLink] = useState('');
@@ -52,7 +48,7 @@ const RegisterCreator = () => {
         const data = response.data;
         localStorage.setItem('token', data.token);
         console.log(data);
-        window.location.href = `/creators`;
+        window.location.href = `/company`;
 
     } catch (err) {
         console.log('Error:', err);
@@ -63,7 +59,6 @@ const submitBtn = async (e) => {
   e.preventDefault();
   await handleSubmit();
 };
-
 
   return (
     <div className="register-creator">
@@ -141,12 +136,8 @@ const submitBtn = async (e) => {
             id="avatar"
             accept="image/*"
             ref={fileInput}
-            // onChange={handleFileChange}
           />
         </div>
-        {/* <button className="btnn" type="submit">Register</button>         */}
-
-    
         <button className="btnn" type="submit">Register</button>        
         </form>
     </div>
