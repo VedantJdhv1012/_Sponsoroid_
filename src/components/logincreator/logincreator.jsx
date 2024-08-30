@@ -13,10 +13,10 @@ const LoginCreator = () => {
       window.location.href = `/creators`;
     }
   }, [localStorage.getItem("token")]);
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Add your form submission logic here
   };
 
   return (
