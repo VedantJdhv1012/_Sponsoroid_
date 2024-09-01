@@ -7,9 +7,11 @@ header {
   top: 0;
   z-index: 99999;
 }
+
 header img {
   width: 170px;
 }
+
 header a {
   margin-left: 30px;
   transition: 0.5s;
@@ -19,10 +21,11 @@ header a {
 header a:hover {
   color: #27ae60;
 }
-.button a:hover {
 
+.button a:hover {
   font-size: medium;
 }
+
 header span {
   width: auto;
   padding: 3px 10px;
@@ -30,33 +33,42 @@ header span {
   border-radius: 20px;
   color: #ffffff;
   margin-right: 4px;
-  font-weight: 400;}
-
+  font-weight: 400;
+}
 
 header h4 {
   font-weight: 500;
   margin-right: 20px;
 }
+
 header .toggle {
   display: none;
 }
+
 @media screen and (max-width: 768px) {
   header {
     padding: 0;
   }
+  
   header img {
     margin-top: 30px;
   }
+  
+  /* Remove this rule or update it to ensure the button is displayed */
   header .button {
-    display: none;
+    display: block; /* Ensure the Join Us button is visible on small screens */
+    margin-top: 10px;
   }
+  
   header .nav .flex {
     display: none;
   }
+  
   header .toggle {
     display: block;
     margin-top: 20px;
   }
+  
   header .small {
     position: absolute;
     top: 10vh;
@@ -65,13 +77,67 @@ header .toggle {
     background-color: #27ae60;
     padding: 20px;
   }
+  
   header li a {
     display: inline-block;
     margin-bottom: 20px;
     color: #fff;
   }
 }
+
 .button {
   position: relative;
 }
 
+.button2 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.button2 .btn2 {
+  background-color: #27ae60; /* Same green color as in the header */
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  margin-left: 20px;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.button2 .btn2 i {
+  margin-right: 8px;
+}
+
+.button2 .btn2:hover {
+  background-color: #218c54; /* Slightly darker green on hover */
+  transform: scale(1.05);
+}
+
+.button2 .btn2:focus {
+  outline: none;
+  box-shadow: 0 0 5px #27ae60;
+}
+
+@media screen and (max-width: 768px) {
+  .button2 {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+  }
+
+  .button2 .btn2 {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .button2 .btn2:last-child {
+    margin-bottom: 0;
+  }
+}

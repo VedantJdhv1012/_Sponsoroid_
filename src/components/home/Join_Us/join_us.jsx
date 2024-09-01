@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom'; // Use Link from react-router-dom for internal routing
 import './JoinOptions.css'; // Import the CSS file for styling
 import Heading from "../../common/Heading";
 
 const JoinOptions = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="join">
       <Heading title='JOIN AS' subtitle='Join our community to collaborate and grow' />

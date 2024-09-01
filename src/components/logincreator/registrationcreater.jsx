@@ -1,8 +1,7 @@
-import React, { useState,useRef,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './RegisterCreator.css'; // Import the CSS file for styling
-import { Link } from 'react-router-dom'; // Use Link from react-router-dom for internal routing
-import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 import axios from "axios";
+
 const RegisterCreator = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -11,16 +10,18 @@ const RegisterCreator = () => {
   const [password, setPassword] = useState('');
   const [typeofContent, setTypeofContent] = useState('');
   const [description, setDescription] = useState('');
-  // const [avatar, setAvatar] = useState(null);
   const fileInput = React.createRef();
   useEffect(() => {
-    if (
-      localStorage.getItem("token") != null &&
-      localStorage.getItem("token") != undefined
-    ) {
-      window.location.href = `/creators`;
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Redirect to company page if already logged in
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      window.location.href = `/company`;
     }
-  }, [localStorage.getItem("token")]);
+  }, []);
+
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append('name', name);
@@ -30,18 +31,16 @@ const RegisterCreator = () => {
     formData.append('password', password);
     formData.append('TypeofContent', typeofContent);
     formData.append('description', description);
-    formData.append('avatar', fileInput.current.files[0]); // Assuming fileInput is a ref to the file input element
-
-    // console.log([...formData.entries()]);
+    formData.append('avatar', fileInput.current.files[0]); 
 
     try {
-        const response = await axios.post('http://localhost:2000/api/v1/creator/register', formData, {
+        const response = await axios.post('https://sponsoroid-backend.onrender.com/api/v1/creator/register', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         });
 
-        if (response.status !== 200) { // Check if response status is not OK
+        if (response.status !== 200) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -65,7 +64,7 @@ const submitBtn = async (e) => {
       <h2>Creator Registration</h2>
       <form onSubmit={submitBtn} encType='multipart/form-data'>
         <div className="form-group">
-          <label htmlFor="name">Name</label> {/* Updated label */}
+          <label htmlFor="name">Name</label>
           <input
             type="text"
             id="name"
@@ -138,8 +137,8 @@ const submitBtn = async (e) => {
             ref={fileInput}
           />
         </div>
-        <button className="btnn" type="submit">Register</button>        
-        </form>
+        <button className="btnn" type="submit">Register</button>
+      </form>
     </div>
   );
 };

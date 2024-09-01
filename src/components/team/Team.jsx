@@ -1,117 +1,112 @@
 import React, { useEffect, useState } from "react"
 import Heading from "../common/Heading"
-import { team } from "../data/Data"
-import "./team.css"
-import { Link } from 'react-router-dom'; // Use Link from react-router-dom for internal routing
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Buffer } from 'buffer';
+import "./team.css"
 
 const Team = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const location = useLocation();
-  let current;
-  let notCurrent;
-  const [userId,setUserId] = useState('');
-
-  useEffect(()=>{
-    if (location.pathname.includes("/creator")) {
-    current = "company";
-    notCurrent = "creator";
+  const [current, setCurrent] = useState('');
+  const [notCurrent, setNotCurrent] = useState('');
+  const [userId, setUserId] = useState('');
+  const [creators, setCreators] = useState([]);
+  const [headingTitle, setHeadingTitle] = useState('');
+  const [headingSubtitle, setHeadingSubtitle] = useState('');
+ 
+  useEffect(() => {
+    if (location.pathname.includes("/creators")) {
+      setCurrent("company");
+      setNotCurrent("creator");     
+      setHeadingTitle('Explore Top Creators');
+      setHeadingSubtitle('Discover and connect with the best in your industry—sorted by expertise for seamless collaborations.');
+    
+    } else {
+      setCurrent("creator");
+      setNotCurrent("company");
+      setHeadingTitle('Explore Top Companies');
+      setHeadingSubtitle('Discover and connect with leading companies in your industry—perfect for collaboration and growth.');
+ 
     }
-    else{
-      current = "creator";
-      notCurrent = "company";
-    }
-  },[location.pathname]);
+  }, [location.pathname]);
 
   useEffect(() => {
-    if (
-      localStorage.getItem("token") == null ||
-      localStorage.getItem("token") == undefined
-    ) {
-      window.location.href = `/register-`+current;
+    if (!localStorage.getItem("token")) {
+      window.location.href = `/register-${current}`;
     }
-  }, [localStorage.getItem("token")]);
+  }, [current]);
 
   const token = localStorage.getItem("token");
 
-  useEffect(()=>{
-    const base64Payload = token.split('.')[1]; 
-    const decodedPayload = Buffer.from(base64Payload, 'base64').toString('utf-8');
-    const payloadObject = JSON.parse(decodedPayload);
-    setUserId(payloadObject);
-    console.log(userId);
-  },[]);
-  const [creators, setCreators] = useState([]);
+  useEffect(() => {
+    if (token) {
+      const base64Payload = token.split('.')[1];
+      const decodedPayload = Buffer.from(base64Payload, 'base64').toString('utf-8');
+      const payloadObject = JSON.parse(decodedPayload);
+      setUserId(payloadObject);
+      console.log(userId);
+    }
+  }, [token]);
 
   useEffect(() => {
-    try {
-      axios.get(`http://localhost:2000/api/v1/${notCurrent}/getAll`)
-        .then((res) => setCreators(res.data))
-        console.log(creators);
-    }
-    catch (err) {
-      console.log(err);
-    }
-  }, [])
+    axios.get(`https://sponsoroid-backend.onrender.com/api/v1/${notCurrent}/getAll`)
+      .then((res) => setCreators(res.data))
+      .catch((err) => console.log(err));
+  }, [notCurrent]);
 
   return (
     <>
       <section className='team background'>
         <div className='container'>
-          <Heading title='Explore Top Creators' subtitle='Discover and connect with the best in your industry—sorted by expertise for seamless collaborations.' />
-
+          <Heading title={headingTitle} subtitle={headingSubtitle} />
           <div className='content mtop grid3'>
-            
-          
-           {creators.map((val, index) => (
+            {creators.map((val, index) => (
               <div className='box' key={index}>
                 <div className='details'>
-                    
-
                   <div className='img'>
-                    <img src={"http://localhost:2000/images/" + val.avatar} alt='' />
+                    <img src={"https://sponsoroid-backend.onrender.com/images/" + val.avatar} alt='' />
                     <i className='fa-solid fa-circle-check'></i>
                   </div>
                   <i className='fa fa-video'></i>
                   <label>{val.TypeofContent}</label>
                   <h4>{val.name}</h4>
 
+                  <div className="social-links">
+                    {val.linked && (
+                      <a href={val.linked} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <i className='fa-brands fa-linkedin'></i>
+                      </a>
+                    )}
+                    {val.twitter && (
+                      <a href={val.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                        <i className='fa-brands fa-twitter'></i>
+                      </a>
+                    )}
+                    {val.instaLink && (
+                      <a href={val.instaLink} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <i className='fa-brands fa-instagram'></i>
+                      </a>
+                    )}
+                    {val.youtubeLink && (
+                      <a href={val.youtubeLink} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                        <i className='fa-brands fa-youtube'></i>
+                      </a>
+                    )}
+                  </div>
 
-                   <div className="social-links">
-            {val.linkedin && (
-              <a href={val.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <i className='fa-brands fa-linkedin'></i>
-              </a>
-            )}
-            {val.twitter && (
-              <a href={val.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                <i className='fa-brands fa-twitter'></i>
-              </a>
-            )}
-            {val.instaLink && (
-              <a href={val.instaLink} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                <i className='fa-brands fa-instagram'></i>
-              </a>
-            )}
-            {val.youtubeLink && (
-              <a href={val.youtubeLink} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-                <i className='fa-brands fa-youtube'></i>
-              </a>
-            )}
-          </div>
                   <div className='button flex'>
-                  <button>
+                    <button>
                       <i className='fa fa-envelope'></i>
                       Message
                     </button>
-                    <Link to={`/profile/${val._id}`}><button className='btn3'>View Profile</button></Link> 
-
-       </div>
+                    <Link to={`/profile/${val._id}`}><button className='btn3'>View Profile</button></Link>
+                  </div>
                 </div>
               </div>
             ))}
-           
           </div>
         </div>
       </section>

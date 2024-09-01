@@ -1,0 +1,38 @@
+.join {
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    margin-bottom: 60px;
+  }
+  
+  .container1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+  }
+  
+  .redirect {
+    text-align: center;
+    margin: 0 20px;
+  }
+  
+  .image {
+    width: 150px; /* Set the desired width */
+    height: 150px; /* Set the desired height */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+  }
+  
+  .image:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+  }
+  
+  .title {
+    font-size: 24px;
+    margin-top: 15px;
+    color: #333; /* Adjust color according to your design */
+  }
+  

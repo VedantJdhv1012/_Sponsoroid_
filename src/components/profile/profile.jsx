@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './profile.css'; // Import the CSS file for styling
+import { useParams } from 'react-router-dom';
 
 // Sample data import
 import { team } from '../data/Data';
@@ -7,13 +8,19 @@ import axios from 'axios';
 
 const ProfilePage = ({ match }) => {
   // Get the profile ID from the route parameters
-  const profileId = match.params.id;
+  // const profileId = match.params._id;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  const { id } = useParams();
+  const profileId = id;
   const [profileData,setProfileData] = useState(undefined);
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://localhost:2000/api/v1/company/getSingle/${profileId}`);
+        const response = await axios.get(`https://sponsoroid-backend.onrender.com/api/v1/company/getSingle/${profileId}`);
         console.log(response.data);
+  
         setProfileData(response.data);
       } catch (error) {
         console.log(error);
@@ -25,7 +32,7 @@ const ProfilePage = ({ match }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://localhost:2000/api/v1/creator/getSingle/${profileId}`);
+        const response = await axios.get(`https://sponsoroid-backend.onrender.com/api/v1/creator/getSingle/${profileId}`);
 
         console.log(response.data);
         setProfileData(response.data);
@@ -40,7 +47,7 @@ const ProfilePage = ({ match }) => {
   
   
   // Find the profile data based on the ID
-  // const profileData = team.find(profile => profile.id === profileId);
+//  profileData = team.find(profile => profile.id === profileId);
 
   if (!profileData) {
     return <div>Profile not found</div>;
@@ -50,14 +57,14 @@ const ProfilePage = ({ match }) => {
     <div className="profile-container">
       <div className="profile-box">
         <div className="profile-header">
-          <img src={"http://localhost:2000/images/" + profileData.avatar} alt={profileData.name} className="profile-image" />
+          <img src={"https://sponsoroid-backend.onrender.com/images/" + profileData.avatar} alt={profileData.name} className="profile-image" />
           <h1>{profileData.name}</h1>
           <p className="type-of-content">{profileData.TypeofContent}</p>
         </div>
         <div className="profile-details">
           <div className="social-links">
-            {profileData.linkedin && (
-              <a href={profileData.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            {profileData.linked && (
+              <a href={profileData.linked} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                 <i className='fa-brands fa-linkedin'></i>
               </a>
             )}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './RegisterCompany.css'; // Import the CSS file for styling
-import { Link } from 'react-router-dom'; // Use Link from react-router-dom for internal routing
-import axios from 'axios';
+import './RegisterCompany.css'; 
+import { Link } from 'react-router-dom'; 
 
 const RegisterCompany = () => {
   const [name, setName] = useState('');
@@ -12,12 +11,16 @@ const RegisterCompany = () => {
   const [typeofContent, setTypeofContent] = useState('');
   const [description, setDescription] = useState('');
   // const [avatar, setAvatar] = useState(null);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+ 
 
   const fileInput = React.createRef();
   useEffect(() => {
     if (
-      localStorage.getItem("token") != null &&
-      localStorage.getItem("token") != undefined
+      localStorage.getItem("token") !== null &&
+      localStorage.getItem("token") !== undefined
     ) {
       window.location.href = `/creators`;
     }
@@ -27,17 +30,18 @@ const RegisterCompany = () => {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
-    formData.append('linkedin', linkedin);
+    formData.append('linked', linkedin);
     formData.append('twitter', twitter);
     formData.append('password', password);
     formData.append('TypeofContent', typeofContent);
     formData.append('description', description);
-    formData.append('avatar', fileInput.current.files[0]); // Assuming fileInput is a ref to the file input element
+    formData.append('avatar', fileInput.current.files[0]);
+  // Assuming fileInput is a ref to the file input element
 
     // console.log([...formData.entries()]);
 
     try {
-        const response = await axios.post('http://localhost:2000/api/v1/company/register', formData, {
+        const response = await axios.post('https://sponsoroid-backend.onrender.com/api/v1/company/register', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -99,7 +103,7 @@ const submitBtn = async (e) => {
           <label htmlFor="linkedin">LinkedIn Link</label>
           <input
             type="url"
-            id="linkedin"
+            id="linked"
             value={linkedin}
             onChange={(e) => setLinkedin(e.target.value)}
           />
@@ -139,9 +143,9 @@ const submitBtn = async (e) => {
             ref={fileInput}
           />
         </div>
-        {/* <Link to="/creators" > */}
+     
         <button className="btnn" type="submit">Register</button>        
-        {/* </Link> */}
+     
        
       </form>
     </div>

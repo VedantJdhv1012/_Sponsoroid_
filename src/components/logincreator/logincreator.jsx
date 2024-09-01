@@ -1,22 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import './LoginCreator.css'; // Import the CSS file for styling
-import { Link } from 'react-router-dom'; // Use Link from react-router-dom for internal routing
+import './LoginCreator.css'; 
+import { Link } from 'react-router-dom'; 
 
 const LoginCreator = () => {
   const [creatorEmail, setCreatorEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   useEffect(() => {
-    if (
-      localStorage.getItem("token") != null &&
-      localStorage.getItem("token") != undefined
-    ) {
-      window.location.href = `/creators`;
-    }
-  }, [localStorage.getItem("token")]);
-  
+    window.scrollTo(0, 0);
+  }, []);
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token !== null && token !== undefined) {
+      window.location.href = `/company`;
+    }
+  }, []);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
+    try {
+      const response = await axios.post('https://sponsoroid-backend.onrender.com/api/v1/creator/login', {
+        email: creatorEmail,
+        password: password,
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = response.data;
+      console.log(response);
+      localStorage.setItem('token', data.Token);
+      window.location.href = `/company`;
+
+    } catch (err) {
+      console.error('Error:', err);
+      setError('Invalid email or password');
+    }
   };
 
   return (
@@ -43,11 +65,10 @@ const LoginCreator = () => {
             required
           />
         </div>
-        <Link to="/creators" >
+        {error && <p className="error-message">{error}</p>}
         <button className="btnn" type="submit">Login</button>
-        
-        </Link>      </form>
-     
+      </form>
+
       <div className="register-option">
         <p>Not registered yet? <Link to="/register-creator">
             <span>Register here</span> 
