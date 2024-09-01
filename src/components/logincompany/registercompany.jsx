@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './RegisterCompany.css'; 
 import { Link } from 'react-router-dom'; 
+import axios from 'axios';
 
 const RegisterCompany = () => {
   const [name, setName] = useState('');
